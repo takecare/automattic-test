@@ -11,6 +11,12 @@ An Android App that lists the most recent stories from WordPress.com Freshly Pre
 [OKHttp]: http://square.github.io/okhttp/
 [See examples]: https://github.com/square/okhttp/wiki/Recipes
 
+## Building
+
+1. Clone the git repository
+2. Open Android Studio and import the project
+    - Configured with Android Studio 1.0 RC4
+
 ## Your Task
 
 *If you choose to accept it*: display the "Featured Image" for each post that has one within the list of posts in the app.

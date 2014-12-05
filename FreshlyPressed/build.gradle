@@ -3,32 +3,32 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.11.1'
+        classpath 'com.android.tools.build:gradle:0.14.2'
     }
 }
 
 
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compile 'com.squareup.okhttp:okhttp:2.0.+'
-    compile 'com.squareup.picasso:picasso:2.3.+'
+    compile 'com.squareup.okhttp:okhttp:2.0.0'
+    compile 'com.squareup.picasso:picasso:2.3.4'
 }
 
  
 android {
 
-    compileSdkVersion 20
+    compileSdkVersion 21
     buildToolsVersion "19.1.0"
 
     defaultConfig {
 
         minSdkVersion 15
-        targetSdkVersion 20
+        targetSdkVersion 21
 
         applicationId "com.automattic.freshlypressed"
         versionName "1.0.0"
