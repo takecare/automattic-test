@@ -9,24 +9,24 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import org.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
-
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-import com.squareup.okhttp.Callback;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
-public class PostListFragment extends ListFragment
-implements AdapterView.OnItemClickListener {
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
+public class PostListFragment extends ListFragment implements AdapterView.OnItemClickListener {
     OkHttpClient mClient = new OkHttpClient();
 
     // empty constructor necessary for fragments
-    public PostListFragment() {}
+    public PostListFragment() {
+    }
 
     @Override
     public void onResume() {
@@ -35,13 +35,11 @@ implements AdapterView.OnItemClickListener {
         refreshPosts();
 
         getListView().setOnItemClickListener(this);
-
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-        PostsAdapter adapter = (PostsAdapter)getListAdapter();
+        PostsAdapter adapter = (PostsAdapter) getListAdapter();
         Post post = adapter.getItem(position);
 
         Intent browseIntent = new Intent();
@@ -49,41 +47,34 @@ implements AdapterView.OnItemClickListener {
         browseIntent.setData(post.getUri());
 
         getActivity().startActivity(browseIntent);
-
     }
 
     protected void updatePosts(JSONArray posts) {
 
         setListAdapter(new PostsAdapter(posts));
-
     }
 
     public void refreshPosts() {
-
         Request request = new Request.Builder()
-            .url("https://public-api.wordpress.com/rest/v1/freshly-pressed?number=30")
-            .build();
+                .url("https://public-api.wordpress.com/rest/v1/freshly-pressed?number=30")
+                .build();
 
         Response response = mClient.newCall(request).execute();
 
         JSONObject json = new JSONObject(response.body().string());
         JSONArray postsJson = json.getJSONArray("posts");
         updatePosts(postsJson);
-        
     }
 
     private class PostsAdapter extends BaseAdapter {
-
         private final JSONArray mPostData;
 
         public PostsAdapter(JSONArray postData) {
-
             if (postData == null) {
                 throw new IllegalArgumentException("postData must not be null");
             }
 
             mPostData = postData;
-
         }
 
         @Override
@@ -93,12 +84,11 @@ implements AdapterView.OnItemClickListener {
 
         @Override
         public View getView(int position, View view, ViewGroup parent) {
-
             View itemView = getActivity().getLayoutInflater()
-                .inflate(R.layout.post_list_fragment_item, parent, false);
+                    .inflate(R.layout.post_list_fragment_item, parent, false);
 
-            TextView title = (TextView) itemView.findViewById(R.id.title);
-            TextView summary = (TextView) itemView.findViewById(R.id.summary);
+            TextView title = itemView.findViewById(R.id.title);
+            TextView summary = itemView.findViewById(R.id.summary);
 
             Post post = getItem(position);
 
@@ -117,7 +107,5 @@ implements AdapterView.OnItemClickListener {
         public int getCount() {
             return mPostData.length();
         }
-
     }
-
 }

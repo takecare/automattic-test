@@ -5,7 +5,6 @@ import android.net.Uri;
 import org.json.JSONObject;
 
 public class Post {
-
     private final JSONObject mJson;
 
     public static Post build(JSONObject json) {
@@ -27,5 +26,4 @@ public class Post {
     public Uri getUri() {
         return Uri.parse(mJson.optString("URL"));
     }
-
 }
