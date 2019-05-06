@@ -29,4 +29,4 @@ Display the "Featured Image" for each post that has one within the list of posts
 * Feel free to change anything you want in this repository (project structure, build configuration, README, etc.).
 * Let us know when you're done with the test.
 
-Take the time you need but generally spend no more than four hours on your improvements.
+Take the time you need but your improvements should generally take about 4-6 hours.
