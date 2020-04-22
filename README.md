@@ -25,8 +25,9 @@ Display the "Featured Image" for each post that has one within the list of posts
     * i18n: every user visible string should be translatable.
     * Security, best practices, code documentation, etc.
 * Don't be code-shy and feel free to explore other parts of the app, not only those you need to touch to solve your problem.
-* Commit changes to the git repository that we provided to you, splitting up commits as necessary.
+* If you spot any bugs or areas for improvement, please go ahead and make changes to polish up the app.
+* Commit changes to the git repository that we provided to you, splitting up commits as necessary. We’d love to see a pull request with your changes.
 * Feel free to change anything you want in this repository (project structure, build configuration, README, etc.).
 * Let us know when you're done with the test.
 
-Take the time you need but your improvements should generally take about 4-6 hours.
+Take the time you need, but while there’s no hard time limit most candidates usually spend about 4-6 hours to make their improvements.
