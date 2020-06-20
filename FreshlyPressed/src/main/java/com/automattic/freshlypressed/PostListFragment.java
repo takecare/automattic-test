@@ -10,7 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import java.text.ParseException;
 
@@ -57,6 +60,7 @@ public class PostListFragment extends ListFragment implements AdapterView.OnItem
             @Override
             public void run() {
                 final JSONArray arr = postsApi.loadPosts();
+                // ((JSONObject)arr.get(0)).getString("featured_image")
                 Handler mainH = new Handler(Looper.getMainLooper());
                 mainH.post(new Runnable() {
                     @Override
@@ -115,6 +119,9 @@ public class PostListFragment extends ListFragment implements AdapterView.OnItem
             title.setText(post.getTitle());
             summary.setText(Html.fromHtml(post.getExcerpt().toString()));
             author.setText(post.getAuthor());
+
+            ImageView imageView = itemView.findViewById(R.id.image);
+            Glide.with(parent.getContext()).load(post.getImageUrl()).into(imageView);
 
             new LoadCountTask(new LoadCountCallback() {
                 @Override
