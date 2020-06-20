@@ -17,7 +17,7 @@ class PostsApi(private var mClient: OkHttpClient?) {
                 .build()
         try {
             val response: Response = mClient!!.newCall(request).execute()
-            val json = JSONObject(response.body()!!.string())
+            val json = JSONObject(response.body!!.string())
             return json.getInt("subscribers_count")
         } catch (e: IOException) {
             e.printStackTrace()
@@ -34,7 +34,7 @@ class PostsApi(private var mClient: OkHttpClient?) {
 
         val response = mClient!!.newCall(request).execute()
 
-        val json = JSONObject(response.body()!!.string())
+        val json = JSONObject(response.body!!.string())
         return json.getJSONArray("posts")
     }
 }
