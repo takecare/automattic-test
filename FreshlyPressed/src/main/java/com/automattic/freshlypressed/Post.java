@@ -2,12 +2,12 @@ package com.automattic.freshlypressed;
 
 import android.net.Uri;
 
-import org.json.JSONObject;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.json.JSONObject;
 
 public class Post {
     private final JSONObject mJson;
@@ -30,6 +30,10 @@ public class Post {
 
     public CharSequence getAuthor() {
         return mJson.optJSONObject("author").optString("name");
+    }
+
+    public String getImageUrl() {
+        return mJson.optString("featured_image");
     }
 
     public Date getDate() throws ParseException {
