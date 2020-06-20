@@ -3,32 +3,24 @@ package com.automattic.freshlypressed;
 import android.app.ListFragment;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.text.ParseException;
-import java.util.function.Consumer;
 
-import kotlin.Unit;
-import kotlin.jvm.functions.Function1;
-import okhttp3.Call;
-import okhttp3.Callback;
+import org.json.JSONArray;
+
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class PostListFragment extends ListFragment implements AdapterView.OnItemClickListener {
     PostsApi postsApi = new PostsApi(new OkHttpClient());
+
     // empty constructor necessary for fragments
     public PostListFragment() {
     }
@@ -60,7 +52,21 @@ public class PostListFragment extends ListFragment implements AdapterView.OnItem
     }
 
     public void refreshPosts() {
-        updatePosts(postsApi.loadPosts());
+        // TODO drop this thread. only here to get this to run @RUI
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final JSONArray arr = postsApi.loadPosts();
+                Handler mainH = new Handler(Looper.getMainLooper());
+                mainH.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        updatePosts(arr);
+                    }
+                });
+            }
+        }).start();
+//        updatePosts(postsApi.loadPosts());
     }
 
     private class PostsAdapter extends BaseAdapter {
@@ -105,7 +111,6 @@ public class PostListFragment extends ListFragment implements AdapterView.OnItem
             TextView title = itemView.findViewById(R.id.title);
             TextView summary = itemView.findViewById(R.id.summary);
             TextView author = itemView.findViewById(R.id.author_name);
-
 
             title.setText(post.getTitle());
             summary.setText(Html.fromHtml(post.getExcerpt().toString()));
