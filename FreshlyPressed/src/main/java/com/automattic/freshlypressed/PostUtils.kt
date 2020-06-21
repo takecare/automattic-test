@@ -1,12 +1,11 @@
 package com.automattic.freshlypressed
 
 import java.text.DateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 object PostUtils {
     fun printDate(date: Date): String {
-        val dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.UK)
+        val dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault())
         return dateFormat.format(date)
     }
 }

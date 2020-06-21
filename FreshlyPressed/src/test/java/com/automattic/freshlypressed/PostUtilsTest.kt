@@ -5,6 +5,7 @@ import org.junit.Test
 import java.util.Date
 
 class PostUtilsTest {
+
     @Test
     fun printsDateCorrectly() {
         val result = PostUtils.printDate(Date(1230000000000))
