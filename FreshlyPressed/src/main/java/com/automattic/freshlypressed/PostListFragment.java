@@ -1,6 +1,5 @@
 package com.automattic.freshlypressed;
 
-import android.app.ListFragment;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -19,6 +18,7 @@ import java.text.ParseException;
 
 import org.json.JSONArray;
 
+import androidx.fragment.app.ListFragment;
 import okhttp3.OkHttpClient;
 
 public class PostListFragment extends ListFragment implements AdapterView.OnItemClickListener {
