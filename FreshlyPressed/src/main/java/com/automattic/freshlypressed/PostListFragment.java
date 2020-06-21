@@ -40,7 +40,7 @@ public class PostListFragment extends ListFragment implements AdapterView.OnItem
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         PostsAdapter adapter = (PostsAdapter) getListAdapter();
-        Post post = adapter.getItem(position);
+        PojoPost post = adapter.getItem(position);
 
         Intent browseIntent = new Intent();
         browseIntent.setAction(Intent.ACTION_VIEW);
@@ -85,14 +85,14 @@ public class PostListFragment extends ListFragment implements AdapterView.OnItem
         }
 
         @Override
-        public Post getItem(int position) {
-            return Post.build(mPostData.optJSONObject(position));
+        public PojoPost getItem(int position) {
+            return PojoPost.build(mPostData.optJSONObject(position));
         }
 
         @Override
         public View getView(int position, View view, ViewGroup parent) {
-            Post previousItem = position > 0 ? getItem(position - 1) : null;
-            Post post = getItem(position);
+            PojoPost previousItem = position > 0 ? getItem(position - 1) : null;
+            PojoPost post = getItem(position);
             boolean isNewDay = false;
             try {
                 isNewDay = previousItem == null || (previousItem.getDate().getTime() - 60000 * 60 * 24) > post.getDate().getTime();

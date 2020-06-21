@@ -9,14 +9,14 @@ import java.util.Date;
 
 import org.json.JSONObject;
 
-public class Post {
+public class PojoPost {
     private final JSONObject mJson;
 
-    public static Post build(JSONObject json) {
-        return new Post(json);
+    public static PojoPost build(JSONObject json) {
+        return new PojoPost(json);
     }
 
-    public Post(JSONObject json) {
+    public PojoPost(JSONObject json) {
         mJson = json;
     }
 
