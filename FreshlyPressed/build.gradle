@@ -25,9 +25,6 @@ repositories {
 }
 
 dependencies {
-    // FIXME added just so we can use Glide.with() in a fragment for now @RUI
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-
     implementation 'com.squareup.okhttp3:okhttp:4.5.0'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
