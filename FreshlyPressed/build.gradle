@@ -39,6 +39,11 @@ dependencies {
     implementation "androidx.activity:activity:1.1.0"
     implementation "androidx.activity:activity-ktx:1.1.0"
 
+    def lifecycle_version = '2.2.0'
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+
     testImplementation 'junit:junit:4.13'
     testImplementation 'org.mockito:mockito-core:2.27.0'
     testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0'
