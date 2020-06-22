@@ -7,5 +7,5 @@ import retrofit2.http.Query
 interface PostsService {
 
     @GET("discover.wordpress.com/posts")
-    suspend fun getPosts(@Query("number") number: Int = 10): List<Post>
+    suspend fun getPosts(@Query("number") number: Int = 10): List<PostData>
 }
