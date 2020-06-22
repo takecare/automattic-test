@@ -23,27 +23,13 @@ class PostsViewModel(
 
     fun loadData() {
         viewModelScope.launch(Dispatchers.IO) {
-            val jsonPosts = postsRepository.old_loadPosts()
+            val posts = postsRepository.loadPosts()
 
             // TODO we're gonna need different types of models:
             // - we need the Post model
             // - we need a "ui model" so we can have headers and items
             // TODO extract mapping logic to mapper
-            val posts = mutableListOf<Post>()
-            for (i in 0 until jsonPosts.length()) {
-                val jsonPost = jsonPosts.optJSONObject(i)
-                posts.add(
-                    Post(
-                        title = jsonPost.optString("title"),
-                        excerpt = jsonPost.optString("excerpt"),
-                        author = jsonPost.optJSONObject("author")?.optString("name") ?: "",
-                        imageUrl = jsonPost.optString("featured_image"),
-                        date = Date(),
-                        authorUrl = jsonPost.optJSONObject("author")?.optString("url") ?: "",
-                        uri = Uri.parse(jsonPost.optString("URL"))
-                    )
-                )
-            }
+
             _posts.postValue(posts)
         }
     }
