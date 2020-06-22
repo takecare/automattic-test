@@ -6,5 +6,7 @@ interface PostsRepository {
 
     fun loadSubscribersCount(url: String): Int
 
-    fun loadPosts(): JSONArray // TODO should be a model @RUI
+    fun old_loadPosts(): JSONArray
+
+    suspend fun loadPosts(): List<Post>
 }

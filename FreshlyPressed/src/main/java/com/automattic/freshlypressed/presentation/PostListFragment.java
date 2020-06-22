@@ -64,7 +64,7 @@ public class PostListFragment extends ListFragment implements AdapterView.OnItem
         new Thread(new Runnable() {
             @Override
             public void run() {
-                final JSONArray arr = postsApi.loadPosts();
+                final JSONArray arr = postsApi.old_loadPosts();
                 Handler mainH = new Handler(Looper.getMainLooper());
                 mainH.post(new Runnable() {
                     @Override

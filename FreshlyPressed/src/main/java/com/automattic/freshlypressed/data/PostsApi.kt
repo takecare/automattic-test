@@ -1,5 +1,6 @@
 package com.automattic.freshlypressed.data
 
+import com.automattic.freshlypressed.domain.Post
 import com.automattic.freshlypressed.domain.PostsRepository
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -29,7 +30,7 @@ class PostsApi(
         return -1
     }
 
-    override fun loadPosts(): JSONArray {
+    override fun old_loadPosts(): JSONArray {
         val request = Request.Builder()
             .url("https://public-api.wordpress.com/rest/v1.1/sites/discover.wordpress.com/posts?number=10")
             .build()
@@ -41,4 +42,6 @@ class PostsApi(
 
         return jsonPosts
     }
+
+    override suspend fun loadPosts(): List<Post> = emptyList()
 }
