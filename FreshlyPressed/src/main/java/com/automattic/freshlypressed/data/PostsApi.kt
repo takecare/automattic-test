@@ -1,5 +1,6 @@
-package com.automattic.freshlypressed
+package com.automattic.freshlypressed.data
 
+import com.automattic.freshlypressed.domain.PostsRepository
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
@@ -10,9 +11,9 @@ import java.io.IOException
 
 class PostsApi(
     private val mClient: OkHttpClient?
-) {
+) : PostsRepository {
 
-    fun loadSubscribersCount(url: String): Int {
+    override fun loadSubscribersCount(url: String): Int {
         val request = Request.Builder()
             .url("https://public-api.wordpress.com/rest/v1.1/sites/$url")
             .build()
@@ -28,7 +29,7 @@ class PostsApi(
         return -1
     }
 
-    fun loadPosts(): JSONArray {
+    override fun loadPosts(): JSONArray {
         val request = Request.Builder()
             .url("https://public-api.wordpress.com/rest/v1.1/sites/discover.wordpress.com/posts?number=10")
             .build()

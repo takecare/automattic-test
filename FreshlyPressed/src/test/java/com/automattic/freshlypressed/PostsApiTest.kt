@@ -1,5 +1,6 @@
 package com.automattic.freshlypressed
 
+import com.automattic.freshlypressed.data.PostsApi
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.whenever
 import okhttp3.Call

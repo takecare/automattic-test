@@ -1,4 +1,4 @@
-package com.automattic.freshlypressed;
+package com.automattic.freshlypressed.domain;
 
 import android.net.Uri;
 

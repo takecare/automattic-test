@@ -1,4 +1,4 @@
-package com.automattic.freshlypressed;
+package com.automattic.freshlypressed.presentation;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -12,6 +12,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.automattic.freshlypressed.domain.PojoPost;
+import com.automattic.freshlypressed.PostUtils;
+import com.automattic.freshlypressed.R;
+import com.automattic.freshlypressed.data.PostsApi;
+import com.automattic.freshlypressed.domain.PostsRepository;
 import com.bumptech.glide.Glide;
 
 import java.text.ParseException;
@@ -22,7 +27,7 @@ import androidx.fragment.app.ListFragment;
 import okhttp3.OkHttpClient;
 
 public class PostListFragment extends ListFragment implements AdapterView.OnItemClickListener {
-    PostsApi postsApi = new PostsApi(new OkHttpClient());
+    private PostsRepository postsApi = new PostsApi(new OkHttpClient());
 
     // empty constructor necessary for fragments
     public PostListFragment() {
@@ -60,7 +65,6 @@ public class PostListFragment extends ListFragment implements AdapterView.OnItem
             @Override
             public void run() {
                 final JSONArray arr = postsApi.loadPosts();
-                // ((JSONObject)arr.get(0)).getString("featured_image")
                 Handler mainH = new Handler(Looper.getMainLooper());
                 mainH.post(new Runnable() {
                     @Override
@@ -70,7 +74,6 @@ public class PostListFragment extends ListFragment implements AdapterView.OnItem
                 });
             }
         }).start();
-//        updatePosts(postsApi.loadPosts());
     }
 
     private class PostsAdapter extends BaseAdapter {
