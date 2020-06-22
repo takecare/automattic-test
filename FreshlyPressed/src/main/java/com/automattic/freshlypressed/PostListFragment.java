@@ -89,19 +89,25 @@ public class PostListFragment extends ListFragment implements AdapterView.OnItem
             return PojoPost.build(mPostData.optJSONObject(position));
         }
 
-        @Override
-        public View getView(int position, View view, ViewGroup parent) {
-            PojoPost previousItem = position > 0 ? getItem(position - 1) : null;
-            PojoPost post = getItem(position);
-            boolean isNewDay = false;
+        private boolean isNewDay(PojoPost currentItem, PojoPost previousItem) {
             try {
-                isNewDay = previousItem == null || (previousItem.getDate().getTime() - 60000 * 60 * 24) > post.getDate().getTime();
+                long dayOfPreviousItem = previousItem.getDate().getTime() - 60000 * 60 * 24;
+                return dayOfPreviousItem > currentItem.getDate().getTime();
             } catch (ParseException e) {
                 e.printStackTrace();
             }
 
-            final View itemView = getActivity().getLayoutInflater()
-                    .inflate(!isNewDay ? R.layout.post_list_fragment_item : R.layout.post_list_fragment_header_item, parent, false);
+            return false;
+        }
+
+        @Override
+        public View getView(int position, View view, ViewGroup parent) {
+            PojoPost previousItem = position > 0 ? getItem(position - 1) : null;
+            PojoPost post = getItem(position);
+            boolean isNewDay = previousItem == null || isNewDay(post, previousItem);
+
+            int layout = isNewDay ? R.layout.post_list_fragment_header_item : R.layout.post_list_fragment_item;
+            final View itemView = getActivity().getLayoutInflater().inflate(layout, parent, false);
 
             if (isNewDay) {
                 TextView header = itemView.findViewById(R.id.header);

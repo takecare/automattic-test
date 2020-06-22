@@ -1,7 +1,5 @@
 package com.automattic.freshlypressed
 
-import okhttp3.Call
-import okhttp3.Callback
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
@@ -10,11 +8,14 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 
-class PostsApi(private var mClient: OkHttpClient?) {
+class PostsApi(
+    private val mClient: OkHttpClient?
+) {
+
     fun loadSubscribersCount(url: String): Int {
         val request = Request.Builder()
-                .url("https://public-api.wordpress.com/rest/v1.1/sites/$url")
-                .build()
+            .url("https://public-api.wordpress.com/rest/v1.1/sites/$url")
+            .build()
         try {
             val response: Response = mClient!!.newCall(request).execute()
             val json = JSONObject(response.body!!.string())
@@ -29,12 +30,14 @@ class PostsApi(private var mClient: OkHttpClient?) {
 
     fun loadPosts(): JSONArray {
         val request = Request.Builder()
-                .url("https://public-api.wordpress.com/rest/v1.1/sites/discover.wordpress.com/posts?number=10")
-                .build()
+            .url("https://public-api.wordpress.com/rest/v1.1/sites/discover.wordpress.com/posts?number=10")
+            .build()
 
         val response = mClient!!.newCall(request).execute()
 
         val json = JSONObject(response.body!!.string())
-        return json.getJSONArray("posts")
+        val jsonPosts = json.getJSONArray("posts")
+
+        return jsonPosts
     }
 }
