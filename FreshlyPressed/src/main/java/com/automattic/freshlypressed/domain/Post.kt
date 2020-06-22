@@ -3,7 +3,6 @@ package com.automattic.freshlypressed.domain
 import android.net.Uri
 import java.util.*
 
-// TODO most basic model for now @RUI
 data class Post(
     val title: String,
     val excerpt: String,

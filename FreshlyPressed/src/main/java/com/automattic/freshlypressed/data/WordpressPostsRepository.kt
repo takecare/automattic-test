@@ -7,7 +7,8 @@ import org.json.JSONArray
 import java.util.*
 
 class WordpressPostsRepository(
-    private val service: PostsService
+    private val service: PostsService,
+    private val mapper: Mapper
 ) : PostsRepository {
 
     override fun loadSubscribersCount(url: String): Int {
@@ -18,15 +19,26 @@ class WordpressPostsRepository(
 
     override suspend fun loadPosts(): List<Post> {
         val data = service.getPosts()
-
-        return data.map { Post(
-            title = it.title,
-            excerpt = it.excerpt,
-            author = it.author,
-            imageUrl = it.imageUrl,
-            date = Date(),
-            authorUrl = it.authorUrl,
-            uri = Uri.parse(it.uri)
-        ) }
+        return data.posts.map(mapper::map)
     }
+}
+
+interface Mapper {
+    // map postdata to postdomain
+    fun map(data: PostData): Post
+}
+
+class PostMapper(
+    val mapDate: (String) -> Date
+) : Mapper {
+    override fun map(data: PostData) =
+        Post(
+            title = data.title,
+            excerpt = data.excerpt,
+            author = data.author.niceName,
+            imageUrl = data.imageUrl,
+            date = mapDate(data.date),
+            authorUrl = data.author.profileUrl,
+            uri = Uri.parse(data.url)
+        )
 }

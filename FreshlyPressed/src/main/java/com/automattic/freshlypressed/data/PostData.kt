@@ -1,14 +1,19 @@
 package com.automattic.freshlypressed.data
 
-import android.net.Uri
-import java.util.*
+import com.squareup.moshi.Json
 
 data class PostData(
     val title: String,
     val excerpt: String,
-    val author: String,
-    val imageUrl: String,
+    val author: AuthorData,
+    @field:Json(name = "featured_image") val imageUrl: String,
     val date: String,
-    val authorUrl: String,
-    val uri: String
+    @field:Json(name = "URL") val url: String
+)
+
+data class AuthorData(
+    @field:Json(name = "first_name") val firstName: String,
+    @field:Json(name = "last_name") val lastName: String,
+    @field:Json(name = "nice_name") val niceName: String,
+    @field:Json(name = "profile_URL") val profileUrl: String
 )

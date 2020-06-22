@@ -50,12 +50,10 @@ class PostsFragment : Fragment() {
         viewModel.loadData()
 
         viewModel.posts.observe(viewLifecycleOwner) { data ->
-            viewModel.posts.observe(viewLifecycleOwner) { data ->
-                with(binding.postsRecyclerView) {
-                    layoutManager = LinearLayoutManager(context)
-                    adapter = PostsRecyclerAdapter(data) {
-                        // navigate to post
-                    }
+            with(binding.postsRecyclerView) {
+                layoutManager = LinearLayoutManager(context)
+                adapter = PostsRecyclerAdapter(data) {
+                    // navigate to post
                 }
             }
         }
@@ -113,7 +111,6 @@ enum class PostViewType {
     HEADER
 }
 
-
 class PostsRecyclerAdapter(
     private val listener: (Post) -> Unit
 ) : RecyclerView.Adapter<PostViewHolder>() {
@@ -149,7 +146,7 @@ class PostsRecyclerAdapter(
     override fun getItemViewType(position: Int): Int {
         // if isNewDay -> header
         // else -> item
-        return super.getItemViewType(position)
+        return PostViewType.ITEM.ordinal
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
