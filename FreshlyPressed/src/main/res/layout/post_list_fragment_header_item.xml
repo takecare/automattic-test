@@ -15,5 +15,7 @@
         android:paddingLeft="12dp"
         android:layout_height="42dp"/>
 
-    <include layout="@layout/post_list_fragment_item"/>
+    <include
+      android:id="@+id/item"
+      layout="@layout/post_list_fragment_item"/>
 </LinearLayout>
