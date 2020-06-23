@@ -9,16 +9,20 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.automattic.freshlypressed.data.DateMapperImpl
+import com.automattic.freshlypressed.data.PostMapperImpl
 import com.automattic.freshlypressed.data.PostsService
 import com.automattic.freshlypressed.data.WordpressPostsRepository
 import com.automattic.freshlypressed.databinding.PostListFragmentHeaderItemBinding
 import com.automattic.freshlypressed.databinding.PostListFragmentItemBinding
 import com.automattic.freshlypressed.databinding.PostsFragmentBinding
+import com.automattic.freshlypressed.domain.PojoPost
 import com.automattic.freshlypressed.domain.Post
 import com.bumptech.glide.Glide
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.text.ParseException
 
 class PostsFragment : Fragment() {
 
@@ -31,7 +35,9 @@ class PostsFragment : Fragment() {
         .client(okHttpClient)
         .build()
         .create(PostsService::class.java)
-    private val postsRepository = WordpressPostsRepository(postService)
+    private val dateMapper = DateMapperImpl()
+    private val postMapper = PostMapperImpl(dateMapper)
+    private val postsRepository = WordpressPostsRepository(postService, postMapper)
     private val viewModelFactory = PostsViewModelFactory(postsRepository)
 
     private val viewModel: PostsViewModel by viewModels {
@@ -143,24 +149,39 @@ class PostsRecyclerAdapter(
         return data.size
     }
 
-    override fun getItemViewType(position: Int): Int {
-        // if isNewDay -> header
-        // else -> item
-        return PostViewType.ITEM.ordinal
+    private fun isNewDay(currentItem: Post, previousItem: Post): Boolean {
+        try {
+            val dayOfPreviousItem = previousItem.date.time - 60000 * 60 * 24
+            return dayOfPreviousItem > currentItem.date.time
+        } catch (e: ParseException) {
+            e.printStackTrace()
+        }
+        return false
     }
+
+    override fun getItemViewType(position: Int) = when {
+            position == 0 -> PostViewType.HEADER.ordinal
+            position > 0 -> {
+                if (isNewDay(data[position], data[position - 1])) {
+                    PostViewType.ITEM.ordinal
+                } else {
+                    PostViewType.HEADER.ordinal
+                }
+            }
+            else -> throw IllegalStateException("Position cannot be negative.")
+        }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = data[position]
-
-        when (getItemViewType(position)) {
-            PostViewType.HEADER.ordinal -> {
-                //
-            }
-            PostViewType.ITEM.ordinal -> {
-                //
-            }
-            else -> throw Error("")
-        }
-
+        holder.bind(post)
+//        when (getItemViewType(position)) {
+//            PostViewType.HEADER.ordinal -> {
+//                holder.bind(post)
+//            }
+//            PostViewType.ITEM.ordinal -> {
+//                holder.bind(post)
+//            }
+//            else -> throw Error("")
+//        }
     }
 }
