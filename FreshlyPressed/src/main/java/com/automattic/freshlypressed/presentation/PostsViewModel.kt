@@ -24,12 +24,6 @@ class PostsViewModel(
     fun loadData() {
         viewModelScope.launch(Dispatchers.IO) {
             val posts = postsRepository.loadPosts()
-
-            // TODO we're gonna need different types of models:
-            // - we need the Post model
-            // - we need a "ui model" so we can have headers and items
-            // TODO extract mapping logic to mapper
-
             _posts.postValue(posts)
         }
     }

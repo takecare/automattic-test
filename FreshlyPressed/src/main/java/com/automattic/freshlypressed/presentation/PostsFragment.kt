@@ -44,22 +44,30 @@ class PostsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = PostsFragmentBinding.inflate(layoutInflater, container, false)
-        //
+        binding.swipeRefresh.setOnRefreshListener { refreshData() }
+        with(binding.postsRecyclerView) {
+            layoutManager = LinearLayoutManager(context)
+            adapter = PostsRecyclerAdapter {
+                // navigate to post
+            }
+        }
         return binding.root
+    }
+
+    private fun refreshData() {
+        binding.swipeRefresh.isRefreshing = true
+        viewModel.loadData()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.loadData()
+        refreshData()
 
         viewModel.posts.observe(viewLifecycleOwner) { data ->
-            with(binding.postsRecyclerView) {
-                layoutManager = LinearLayoutManager(context)
-                adapter = PostsRecyclerAdapter(data) {
-                    // navigate to post
-                }
-            }
+            val adapter = binding.postsRecyclerView.adapter as PostsRecyclerAdapter
+            adapter.data = data
+            binding.swipeRefresh.isRefreshing = false
         }
     }
 }
