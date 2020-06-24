@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"> <!--?android:attr/listPreferredItemHeightLarge-->
+
+  <ImageView
+    android:id="@+id/image"
+    android:layout_width="120dp"
+    android:layout_height="120dp"
+    android:contentDescription="@null"
+    android:layout_marginEnd="8dp"
+    android:layout_marginRight="8dp"
+    android:maxWidth="180dp"
+    android:maxHeight="180dp"
+    app:layout_constraintBottom_toTopOf="@+id/barrier"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintEnd_toStartOf="@+id/title"
+    tools:src="@android:drawable/ic_menu_camera" />
+
+  <TextView
+    android:id="@+id/title"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:textSize="24sp"
+    android:layout_marginBottom="8dp"
+    app:layout_constraintBottom_toTopOf="@+id/excerpt"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toEndOf="@+id/image"
+    app:layout_constraintTop_toTopOf="@+id/image"
+    tools:text="title title title" />
+
+  <TextView
+    android:id="@+id/excerpt"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:textSize="14sp"
+    app:layout_constraintBottom_toTopOf="@+id/barrier"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="@+id/title"
+    app:layout_constraintTop_toBottomOf="@+id/title"
+    tools:text="excerpt\nexcerpt\nexcerpt\nexcerpt\nexcerpt\nexcerpt\nexcerpt" />
+
+  <androidx.constraintlayout.widget.Barrier
+    android:id="@+id/barrier"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:barrierDirection="bottom"
+    app:constraint_referenced_ids="image,excerpt" />
+
+  <TextView
+    android:id="@+id/author"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="12dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginRight="16dp"
+    android:textSize="12sp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/barrier"
+    app:layout_constraintStart_toStartOf="@+id/image"
+    app:layout_constraintEnd_toStartOf="@+id/subscribers"
+    tools:text="Author: Fernando Pessoa" />
+
+  <TextView
+    android:id="@+id/subscribers"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:gravity="end"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="12dp"
+    android:textSize="12sp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/barrier"
+    app:layout_constraintStart_toEndOf="@+id/author"
+    app:layout_constraintEnd_toEndOf="parent"
+    tools:text="Subscriber count: 42"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
