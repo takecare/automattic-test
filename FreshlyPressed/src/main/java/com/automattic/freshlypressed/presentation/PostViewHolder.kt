@@ -30,8 +30,10 @@ class ItemViewHolder(
             author.text = itemView.resources.getString(R.string.author, post.author)
             subscribers.text = itemView.resources.getString(R.string.subscriber_count, -1) // TODO @RUI
             excerpt.text = post.readableExcerpt()
-
-            Glide.with(itemView.context).load(post.imageUrl).into(image)
+            Glide.with(itemView.context)
+                .load(post.imageUrl)
+                .centerCrop()
+                .into(image)
         }
         itemView.setOnClickListener { listener(post) }
     }
@@ -51,7 +53,10 @@ class HeaderViewHolder(
             author.text = itemView.resources.getString(R.string.author, post.author)
             subscribers.text = itemView.resources.getString(R.string.subscriber_count, -1) // TODO @RUI
             excerpt.text = post.readableExcerpt()
-            Glide.with(itemView.context).load(post.imageUrl).into(image)
+            Glide.with(itemView.context)
+                .load(post.imageUrl)
+                .centerCrop()
+                .into(image)
         }
 
         itemView.setOnClickListener { listener(post) }

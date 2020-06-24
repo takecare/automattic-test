@@ -12,7 +12,6 @@
     android:background="#EEEEEE"
     android:layout_width="match_parent"
     android:layout_height="42dp"
-    android:layout_marginTop="8dp"
     tools:text="Testing header" />
 
   <include
