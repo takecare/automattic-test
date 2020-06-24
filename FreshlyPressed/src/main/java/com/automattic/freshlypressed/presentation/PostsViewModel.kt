@@ -1,15 +1,33 @@
 package com.automattic.freshlypressed.presentation
 
-import android.net.Uri
-import android.os.Bundle
 import androidx.lifecycle.*
-import androidx.savedstate.SavedStateRegistryOwner
-import com.automattic.freshlypressed.data.PostsApi
 import com.automattic.freshlypressed.domain.Post
 import com.automattic.freshlypressed.domain.PostsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.*
+
+data class Effect<T>(
+    private var isConsumed: Boolean = false,
+    private val payload: T
+) {
+    constructor(payload: T) : this(false, payload)
+
+    fun get() =
+        if (isConsumed) {
+            null
+        } else {
+            isConsumed = true
+            payload
+        }
+
+    fun consume(block: (T) -> Unit) {
+        get()?.let(block)
+    }
+}
+
+sealed class PostEffects {
+    data class NavigateToPost(val url: String) : PostEffects()
+}
 
 class PostsViewModel(
     private val handle: SavedStateHandle,
@@ -21,40 +39,22 @@ class PostsViewModel(
     }
     val posts: LiveData<List<Post>> get() = _posts
 
+    private val _effect = MutableLiveData<Effect<PostEffects>>()
+    val effects: LiveData<Effect<PostEffects>> get() = _effect
+
     fun loadData() {
         viewModelScope.launch(Dispatchers.IO) {
             val posts = postsRepository.loadPosts()
             _posts.postValue(posts)
         }
     }
+
+    fun postClicked(post: Post) {
+        val navigation = PostEffects.NavigateToPost(post.uri.toString())
+        _effect.postValue(Effect(navigation))
+    }
 }
 
 interface ViewModelFactory<T : ViewModel> {
     fun create(handle: SavedStateHandle): T
-}
-
-class PostsViewModelFactory(
-    private val repository: PostsRepository
-) : ViewModelFactory<PostsViewModel> {
-    override fun create(handle: SavedStateHandle) = PostsViewModel(handle, repository)
-}
-
-class GenericSavedStateViewModelFactory<T : ViewModel>(
-    private val viewModelFactory: ViewModelFactory<T>,
-    owner: SavedStateRegistryOwner,
-    defaultArgs: Bundle? = null
-) : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
-
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(
-        key: String,
-        modelClass: Class<T>,
-        handle: SavedStateHandle
-    ): T {
-        return if (modelClass.isAssignableFrom(PostsViewModel::class.java)) {
-            viewModelFactory.create(handle)
-        } else {
-            throw IllegalStateException("")
-        } as T
-    }
 }

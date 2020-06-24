@@ -35,7 +35,8 @@ class ItemViewHolder(
                 .centerCrop()
                 .into(image)
         }
-        itemView.setOnClickListener { listener(post) }
+
+        binding.card.setOnClickListener { listener(post) }
     }
 }
 
@@ -59,7 +60,7 @@ class HeaderViewHolder(
                 .into(image)
         }
 
-        itemView.setOnClickListener { listener(post) }
+        binding.item.card.setOnClickListener { listener(post) }
     }
 }
 

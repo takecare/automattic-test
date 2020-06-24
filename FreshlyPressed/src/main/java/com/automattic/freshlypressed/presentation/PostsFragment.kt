@@ -1,23 +1,20 @@
 package com.automattic.freshlypressed.presentation
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.automattic.freshlypressed.R
 import com.automattic.freshlypressed.data.DateMapperImpl
 import com.automattic.freshlypressed.data.PostMapperImpl
 import com.automattic.freshlypressed.data.PostsService
 import com.automattic.freshlypressed.data.WordpressPostsRepository
-import com.automattic.freshlypressed.databinding.*
-import com.automattic.freshlypressed.domain.Post
-import com.bumptech.glide.Glide
+import com.automattic.freshlypressed.databinding.PostsFragmentBinding
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -47,8 +44,8 @@ class PostsFragment : Fragment() {
         binding.swipeRefresh.setOnRefreshListener { refreshData() }
         with(binding.postsRecyclerView) {
             layoutManager = LinearLayoutManager(context)
-            adapter = PostsRecyclerAdapter {
-                // navigate to post
+            adapter = PostsRecyclerAdapter { post ->
+                viewModel.postClicked(post)
             }
         }
         return binding.root
@@ -68,6 +65,19 @@ class PostsFragment : Fragment() {
             val adapter = binding.postsRecyclerView.adapter as PostsRecyclerAdapter
             adapter.data = data
             binding.swipeRefresh.isRefreshing = false
+        }
+
+        viewModel.effects.observe(viewLifecycleOwner) { effect ->
+            effect.consume { payload ->
+                when (payload) {
+                    is PostEffects.NavigateToPost -> {
+                        val browseIntent = Intent()
+                        browseIntent.action = Intent.ACTION_VIEW
+                        browseIntent.data = Uri.parse(payload.url)
+                        activity?.let { startActivity(browseIntent) }
+                    }
+                }
+            }
         }
     }
 }
