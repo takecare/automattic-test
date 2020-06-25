@@ -3,6 +3,8 @@ package com.automattic.freshlypressed.presentation
 import androidx.lifecycle.*
 import com.automattic.freshlypressed.domain.Post
 import com.automattic.freshlypressed.domain.PostsRepository
+import com.automattic.freshlypressed.domain.SiteRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -31,7 +33,9 @@ sealed class PostEffects {
 
 class PostsViewModel(
     private val handle: SavedStateHandle,
-    private val postsRepository: PostsRepository
+    private val postsRepository: PostsRepository,
+    private val siteRepository: SiteRepository,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
     private val _posts = MutableLiveData<List<Post>>().apply {
@@ -43,9 +47,16 @@ class PostsViewModel(
     val effects: LiveData<Effect<PostEffects>> get() = _effect
 
     fun loadData() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             val posts = postsRepository.loadPosts()
             _posts.postValue(posts)
+        }
+    }
+
+    fun loadCount(url: String) {
+        viewModelScope.launch(dispatcher) {
+            val site = siteRepository.getSite(url)
+            site.subscriberCount
         }
     }
 
