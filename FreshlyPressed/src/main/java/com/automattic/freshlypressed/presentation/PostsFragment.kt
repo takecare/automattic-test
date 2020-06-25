@@ -10,8 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.automattic.freshlypressed.R
 import com.automattic.freshlypressed.data.*
 import com.automattic.freshlypressed.databinding.PostsFragmentBinding
+import com.google.android.material.snackbar.Snackbar
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -71,6 +73,10 @@ class PostsFragment : Fragment() {
                         browseIntent.action = Intent.ACTION_VIEW
                         browseIntent.data = Uri.parse(payload.url)
                         activity?.let { startActivity(browseIntent) }
+                    }
+                    is PostEffects.NetworkError -> {
+                        Snackbar.make(requireView(), getString(R.string.error_message), Snackbar.LENGTH_SHORT).show()
+                        binding.swipeRefresh.isRefreshing = false
                     }
                 }
             }

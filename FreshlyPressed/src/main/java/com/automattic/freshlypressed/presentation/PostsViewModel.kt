@@ -10,10 +10,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-sealed class PostEffects {
-    data class NavigateToPost(val url: String) : PostEffects()
-}
-
 class PostsViewModel(
     private val handle: SavedStateHandle,
     private val postsRepository: PostsRepository,
@@ -35,7 +31,7 @@ class PostsViewModel(
             if (result is Result.Success) {
                 _posts.postValue(result.content)
             } else {
-                // TODO @RUI
+                _effect.postValue(PostEffects.NetworkError.asEffect())
             }
         }
     }
@@ -52,7 +48,7 @@ class PostsViewModel(
                     ?.map { item -> if (item == post) item.copy(subscriberCount = site.subscriberCount) else item }
                     ?.let { _posts.postValue(it) }
             } else {
-                // TODO @RUI
+                _effect.postValue(PostEffects.NetworkError.asEffect())
             }
         }
     }
@@ -63,6 +59,9 @@ class PostsViewModel(
     }
 }
 
-interface ViewModelFactory<T : ViewModel> {
-    fun create(handle: SavedStateHandle): T
+sealed class PostEffects {
+    data class NavigateToPost(val url: String) : PostEffects()
+    object NetworkError : PostEffects()
+
+    fun asEffect() = Effect(this)
 }

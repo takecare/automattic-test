@@ -3,4 +3,5 @@
     <string name="app_name">Freshly Pressed</string>
     <string name="author">Author: %1$s</string>
     <string name="subscriber_count">Subscriber count: %1$d</string>
+  <string name="error_message">Oops! Something went wrong.</string>
 </resources>
