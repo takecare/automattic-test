@@ -46,7 +46,8 @@ class PostMapperImpl(
             imageUrl = data.imageUrl,
             date = dateMapper.map(data.date),
             authorUrl = data.author.url,
-            uri = Uri.parse(data.url)
+            uri = Uri.parse(data.url),
+            subscriberCount = Int.MIN_VALUE
         )
 }
 

@@ -27,9 +27,11 @@ class ItemViewHolder(
     override fun bind(post: Post) {
         with(binding) {
             title.text = post.readableTitle()
-            author.text = itemView.resources.getString(R.string.author, post.author)
-            subscribers.text = itemView.resources.getString(R.string.subscriber_count, post.subscriberCount)
             excerpt.text = post.readableExcerpt()
+            author.text = itemView.resources.getString(R.string.author, post.author)
+            if (post.hasSubscriberCount()) {
+                subscribers.text = itemView.resources.getString(R.string.subscriber_count, post.subscriberCount)
+            }
             Glide.with(itemView.context)
                 .load(post.imageUrl)
                 .centerCrop()
@@ -51,9 +53,11 @@ class HeaderViewHolder(
 
         with(binding.item) {
             title.text = post.readableTitle()
-            author.text = itemView.resources.getString(R.string.author, post.author)
-            subscribers.text = itemView.resources.getString(R.string.subscriber_count, post.subscriberCount)
             excerpt.text = post.readableExcerpt()
+            author.text = itemView.resources.getString(R.string.author, post.author)
+            if (post.hasSubscriberCount()) {
+                subscribers.text = itemView.resources.getString(R.string.subscriber_count, post.subscriberCount)
+            }
             Glide.with(itemView.context)
                 .load(post.imageUrl)
                 .centerCrop()
