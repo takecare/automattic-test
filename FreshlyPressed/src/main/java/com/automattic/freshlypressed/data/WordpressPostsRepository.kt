@@ -4,9 +4,15 @@ import android.net.Uri
 import com.automattic.freshlypressed.domain.Post
 import com.automattic.freshlypressed.domain.PostsRepository
 import org.json.JSONArray
+import java.io.IOException
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+
+sealed class Result<T> {
+    data class Success<T>(val content: T) : Result<T>()
+    data class Error<T>(val error: Throwable) : Result<T>()
+}
 
 class WordpressPostsRepository(
     private val service: PostsService,
@@ -19,9 +25,13 @@ class WordpressPostsRepository(
 
     override fun old_loadPosts() = JSONArray()
 
-    override suspend fun loadPosts(): List<Post> {
-        val data = service.getPosts()
-        return data.posts.map(mapper::map)
+    override suspend fun loadPosts(): Result<List<Post>> {
+        return try {
+            val data = service.getPosts().posts.map(mapper::map)
+            Result.Success(data)
+        } catch (exception: IOException) {
+            Result.Error(exception)
+        }
     }
 }
 

@@ -43,5 +43,5 @@ class PostsApi(
         return jsonPosts
     }
 
-    override suspend fun loadPosts(): List<Post> = emptyList()
+    override suspend fun loadPosts(): Result<List<Post>> = Result.Success(emptyList())
 }

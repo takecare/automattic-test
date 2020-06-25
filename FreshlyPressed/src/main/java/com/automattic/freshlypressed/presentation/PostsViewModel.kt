@@ -2,8 +2,10 @@ package com.automattic.freshlypressed.presentation
 
 import android.net.Uri
 import androidx.lifecycle.*
+import com.automattic.freshlypressed.data.Result
 import com.automattic.freshlypressed.domain.Post
 import com.automattic.freshlypressed.domain.PostsRepository
+import com.automattic.freshlypressed.domain.Site
 import com.automattic.freshlypressed.domain.SiteRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -47,13 +49,14 @@ class PostsViewModel(
     private val _effect = MutableLiveData<Effect<PostEffects>>()
     val effects: LiveData<Effect<PostEffects>> get() = _effect
 
-    private val _counts = MutableLiveData<Pair<Post, Int>>()
-    val counts: LiveData<Pair<Post, Int>> get() = _counts
-
     fun loadData() {
         viewModelScope.launch(dispatcher) {
-            val posts = postsRepository.loadPosts()
-            _posts.postValue(posts)
+            val result = postsRepository.loadPosts()
+            if (result is Result.Success) {
+                _posts.postValue(result.content)
+            } else {
+                // TODO @RUI
+            }
         }
     }
 
@@ -62,11 +65,15 @@ class PostsViewModel(
         if (post.hasSubscriberCount() || url == null) return
 
         viewModelScope.launch(dispatcher) {
-            val site = siteRepository.getSite(url)
-            _posts.value
-                ?.map { item -> if (item == post) item.copy(subscriberCount = site.subscriberCount) else item }
-                ?.let { _posts.postValue(it) }
-            //_counts.postValue(post to site.subscriberCount)
+            val result = siteRepository.getSite(url)
+            if (result is Result.Success) {
+                val site = result.content
+                _posts.value
+                    ?.map { item -> if (item == post) item.copy(subscriberCount = site.subscriberCount) else item }
+                    ?.let { _posts.postValue(it) }
+            } else {
+                // TODO @RUI
+            }
         }
     }
 
