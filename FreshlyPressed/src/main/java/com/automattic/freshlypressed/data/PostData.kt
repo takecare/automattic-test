@@ -15,5 +15,5 @@ data class AuthorData(
     @field:Json(name = "first_name") val firstName: String,
     @field:Json(name = "last_name") val lastName: String,
     @field:Json(name = "nice_name") val niceName: String,
-    @field:Json(name = "profile_URL") val profileUrl: String
+    @field:Json(name = "URL") val url: String
 )

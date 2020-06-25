@@ -28,7 +28,7 @@ class ItemViewHolder(
         with(binding) {
             title.text = post.readableTitle()
             author.text = itemView.resources.getString(R.string.author, post.author)
-            subscribers.text = itemView.resources.getString(R.string.subscriber_count, -1) // TODO @RUI
+            subscribers.text = itemView.resources.getString(R.string.subscriber_count, post.subscriberCount)
             excerpt.text = post.readableExcerpt()
             Glide.with(itemView.context)
                 .load(post.imageUrl)
@@ -52,7 +52,7 @@ class HeaderViewHolder(
         with(binding.item) {
             title.text = post.readableTitle()
             author.text = itemView.resources.getString(R.string.author, post.author)
-            subscribers.text = itemView.resources.getString(R.string.subscriber_count, -1) // TODO @RUI
+            subscribers.text = itemView.resources.getString(R.string.subscriber_count, post.subscriberCount)
             excerpt.text = post.readableExcerpt()
             Glide.with(itemView.context)
                 .load(post.imageUrl)

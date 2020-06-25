@@ -39,7 +39,7 @@ class PostMapperImpl(
             author = data.author.niceName,
             imageUrl = data.imageUrl,
             date = dateMapper.map(data.date),
-            authorUrl = data.author.profileUrl,
+            authorUrl = data.author.url,
             uri = Uri.parse(data.url)
         )
 }

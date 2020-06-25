@@ -1,5 +1,6 @@
 package com.automattic.freshlypressed.presentation
 
+import android.net.Uri
 import androidx.lifecycle.*
 import com.automattic.freshlypressed.domain.Post
 import com.automattic.freshlypressed.domain.PostsRepository
@@ -46,6 +47,9 @@ class PostsViewModel(
     private val _effect = MutableLiveData<Effect<PostEffects>>()
     val effects: LiveData<Effect<PostEffects>> get() = _effect
 
+    private val _counts = MutableLiveData<Pair<Post, Int>>()
+    val counts: LiveData<Pair<Post, Int>> get() = _counts
+
     fun loadData() {
         viewModelScope.launch(dispatcher) {
             val posts = postsRepository.loadPosts()
@@ -53,10 +57,16 @@ class PostsViewModel(
         }
     }
 
-    fun loadCount(url: String) {
+    fun loadCount(post: Post) {
+        val url = Uri.parse(post.authorUrl).host
+        if (post.hasSubscriberCount() || url == null) return
+
         viewModelScope.launch(dispatcher) {
             val site = siteRepository.getSite(url)
-            site.subscriberCount
+            _posts.value
+                ?.map { item -> if (item == post) item.copy(subscriberCount = site.subscriberCount) else item }
+                ?.let { _posts.postValue(it) }
+            //_counts.postValue(post to site.subscriberCount)
         }
     }
 

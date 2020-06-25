@@ -10,7 +10,8 @@ import com.automattic.freshlypressed.domain.Post
 import java.text.ParseException
 
 class PostsRecyclerAdapter(
-    private val clickListener: (Post) -> Unit
+    private val clickListener: (Post) -> Unit,
+    private val getSubscriberCount: (Post) -> Unit
 ) : RecyclerView.Adapter<PostViewHolder>() {
 
     var data: List<Post> = emptyList()
@@ -19,7 +20,7 @@ class PostsRecyclerAdapter(
             notifyDataSetChanged()
         }
 
-    constructor(data: List<Post>, listener: (Post) -> Unit) : this(listener) {
+    constructor(data: List<Post>, clickListener: (Post) -> Unit, getSubscriberCount: (Post) -> Unit) : this(clickListener, getSubscriberCount) {
         this.data = data
     }
 
@@ -76,6 +77,7 @@ class PostsRecyclerAdapter(
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = data[position]
+        getSubscriberCount(post)
         holder.bind(post)
     }
 }

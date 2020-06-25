@@ -10,11 +10,11 @@ import retrofit2.http.Path
 // https://public-api.wordpress.com/rest/v1.1/sites/$url
 interface SiteService {
 
-    @GET("/{url}")
+    @GET("{url}")
     suspend fun getSite(@Path("url") url: String): SiteData
 
     companion object {
-        fun createService(okHttpClient: OkHttpClient) =
+        fun createService(okHttpClient: OkHttpClient): SiteService =
             Retrofit.Builder()
                 .baseUrl("https://public-api.wordpress.com/rest/v1.1/sites/")
                 .addConverterFactory(MoshiConverterFactory.create())

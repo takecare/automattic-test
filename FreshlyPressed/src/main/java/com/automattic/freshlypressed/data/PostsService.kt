@@ -14,7 +14,7 @@ interface PostsService {
     suspend fun getPosts(@Query("number") number: Int = 10): Posts
 
     companion object {
-        fun createService(okHttpClient: OkHttpClient) =
+        fun createService(okHttpClient: OkHttpClient): PostsService =
             Retrofit.Builder()
                 .baseUrl("https://public-api.wordpress.com/rest/v1.1/sites/")
                 .addConverterFactory(MoshiConverterFactory.create())

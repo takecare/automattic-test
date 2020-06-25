@@ -38,9 +38,10 @@ class PostsFragment : Fragment() {
         binding.swipeRefresh.setOnRefreshListener { refreshData() }
         with(binding.postsRecyclerView) {
             layoutManager = LinearLayoutManager(context)
-            adapter = PostsRecyclerAdapter { post ->
-                viewModel.postClicked(post)
-            }
+            adapter = PostsRecyclerAdapter(
+                { post -> viewModel.postClicked(post) },
+                { viewModel.loadCount(it) }
+            )
         }
         return binding.root
     }
@@ -58,6 +59,7 @@ class PostsFragment : Fragment() {
         viewModel.posts.observe(viewLifecycleOwner) { data ->
             val adapter = binding.postsRecyclerView.adapter as PostsRecyclerAdapter
             adapter.data = data
+            adapter.notifyDataSetChanged()
             binding.swipeRefresh.isRefreshing = false
         }
 

@@ -10,5 +10,8 @@ data class Post(
     val imageUrl: String,
     val date: Date,
     val authorUrl: String,
-    val uri: Uri
-)
+    val uri: Uri,
+    val subscriberCount: Int = Int.MIN_VALUE // TODO @RUI remove default value
+) {
+    fun hasSubscriberCount() = subscriberCount != Int.MIN_VALUE
+}
