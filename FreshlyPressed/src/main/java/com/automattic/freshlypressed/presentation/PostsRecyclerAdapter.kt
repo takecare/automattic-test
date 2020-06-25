@@ -2,19 +2,15 @@ package com.automattic.freshlypressed.presentation
 
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.automattic.freshlypressed.R
 import com.automattic.freshlypressed.databinding.ItemHeaderBinding
 import com.automattic.freshlypressed.databinding.ItemPostBinding
 import com.automattic.freshlypressed.domain.Post
-import com.bumptech.glide.Glide
 import java.text.ParseException
 
 class PostsRecyclerAdapter(
-    private val listener: (Post) -> Unit
+    private val clickListener: (Post) -> Unit
 ) : RecyclerView.Adapter<PostViewHolder>() {
 
     var data: List<Post> = emptyList()
@@ -31,11 +27,11 @@ class PostsRecyclerAdapter(
         return when (viewType) {
             PostViewType.HEADER.ordinal -> {
                 val binding = ItemHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                HeaderViewHolder(binding, listener, binding.root)
+                HeaderViewHolder(binding, clickListener, binding.root)
             }
             PostViewType.ITEM.ordinal -> {
                 val binding = ItemPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                ItemViewHolder(binding, listener, binding.root)
+                ItemViewHolder(binding, clickListener, binding.root)
             }
             else -> throw Error("Unexpected viewType: $viewType. Known view types are '${PostViewType.values()}'")
         }
