@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   tools:viewBindingIgnore="true">
+
+  <com.google.android.material.appbar.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.appbar.MaterialToolbar
+      android:id="@+id/topAppBar"
+      android:layout_width="match_parent"
+      android:layout_height="?attr/actionBarSize"
+      app:title="@string/app_name"
+      app:layout_scrollFlags="scroll|enterAlways|snap"
+      style="@style/Widget.MaterialComponents.Toolbar.Primary" />
+
+  </com.google.android.material.appbar.AppBarLayout>
 
   <androidx.fragment.app.FragmentContainerView
     android:id="@+id/postsFragment"
