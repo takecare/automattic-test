@@ -1,6 +1,5 @@
 package com.automattic.freshlypressed.domain
 
-import com.automattic.freshlypressed.data.Result
 import org.json.JSONArray
 
 interface PostsRepository {

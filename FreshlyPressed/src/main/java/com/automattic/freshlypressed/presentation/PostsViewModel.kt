@@ -2,33 +2,13 @@ package com.automattic.freshlypressed.presentation
 
 import android.net.Uri
 import androidx.lifecycle.*
-import com.automattic.freshlypressed.data.Result
+import com.automattic.freshlypressed.domain.Result
 import com.automattic.freshlypressed.domain.Post
 import com.automattic.freshlypressed.domain.PostsRepository
-import com.automattic.freshlypressed.domain.Site
 import com.automattic.freshlypressed.domain.SiteRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
-data class Effect<T>(
-    private var isConsumed: Boolean = false,
-    private val payload: T
-) {
-    constructor(payload: T) : this(false, payload)
-
-    fun get() =
-        if (isConsumed) {
-            null
-        } else {
-            isConsumed = true
-            payload
-        }
-
-    fun consume(block: (T) -> Unit) {
-        get()?.let(block)
-    }
-}
 
 sealed class PostEffects {
     data class NavigateToPost(val url: String) : PostEffects()

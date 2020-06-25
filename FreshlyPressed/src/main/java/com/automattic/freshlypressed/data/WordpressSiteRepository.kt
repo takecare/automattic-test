@@ -1,5 +1,6 @@
 package com.automattic.freshlypressed.data
 
+import com.automattic.freshlypressed.domain.Result
 import com.automattic.freshlypressed.domain.Site
 import com.automattic.freshlypressed.domain.SiteRepository
 import java.io.IOException

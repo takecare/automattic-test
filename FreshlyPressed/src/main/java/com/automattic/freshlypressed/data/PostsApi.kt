@@ -2,6 +2,7 @@ package com.automattic.freshlypressed.data
 
 import com.automattic.freshlypressed.domain.Post
 import com.automattic.freshlypressed.domain.PostsRepository
+import com.automattic.freshlypressed.domain.Result
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
