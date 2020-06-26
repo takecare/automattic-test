@@ -21,9 +21,6 @@ class PostsViewModel(
     private val _posts = MutableLiveData<List<Post>>().apply { postValue(emptyList()) }
     val posts: LiveData<List<Post>> get() = _posts
 
-    private val _position = MutableLiveData<Int>().apply { postValue(0) }
-    val position: LiveData<Int> get() = _position
-
     private val _effect = MutableLiveData<Effect<PostEffects>>()
     val effects: LiveData<Effect<PostEffects>> get() = _effect
 
@@ -32,7 +29,6 @@ class PostsViewModel(
             val result = postsRepository.loadPosts()
             if (result is Result.Success) {
                 _posts.postValue(result.content)
-                _position.postValue(handle.get("position") ?: 0)
             } else {
                 _effect.postValue(PostEffects.NetworkError.asEffect())
             }
@@ -59,11 +55,6 @@ class PostsViewModel(
     fun postClicked(post: Post) {
         val navigation = PostEffects.NavigateToPost(post.uri.toString())
         _effect.postValue(Effect(navigation))
-    }
-
-    fun save(position: Int) {
-        handle.set("position", position)
-        Log.d("RUI", "save> ${handle.get("position") ?: -1}")
     }
 }
 
