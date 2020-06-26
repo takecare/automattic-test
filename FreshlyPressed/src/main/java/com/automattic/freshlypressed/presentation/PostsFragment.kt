@@ -3,6 +3,7 @@ package com.automattic.freshlypressed.presentation
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,6 +36,8 @@ class PostsFragment : Fragment() {
         GenericSavedStateViewModelFactory(viewModelFactory, this)
     }
 
+    private var position: Int = 0
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = PostsFragmentBinding.inflate(layoutInflater, container, false)
         binding.swipeRefresh.setOnRefreshListener { refreshData() }
@@ -58,11 +61,14 @@ class PostsFragment : Fragment() {
 
         refreshData()
 
+        viewModel.position.observe(viewLifecycleOwner, { position = it })
+
         viewModel.posts.observe(viewLifecycleOwner) { data ->
             val adapter = binding.postsRecyclerView.adapter as PostsRecyclerAdapter
             adapter.data = data
             adapter.notifyDataSetChanged()
             binding.swipeRefresh.isRefreshing = false
+            // binding.postsRecyclerView.scrollToPosition(position)
         }
 
         viewModel.effects.observe(viewLifecycleOwner) { effect ->
@@ -81,5 +87,11 @@ class PostsFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val position = (binding.postsRecyclerView.layoutManager as? LinearLayoutManager)?.findFirstVisibleItemPosition() ?: 0
+        viewModel.save(position)
     }
 }

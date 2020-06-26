@@ -64,17 +64,6 @@ class PostsRecyclerAdapter(
             else -> throw IllegalStateException("Position cannot be negative.")
         }
 
-    override fun onViewDetachedFromWindow(holder: PostViewHolder) {
-        super.onViewDetachedFromWindow(holder)
-        Log.d("RUI", "detached holder")
-    }
-
-    override fun onViewRecycled(holder: PostViewHolder) {
-        super.onViewRecycled(holder)
-        Log.d("RUI", "view recycled")
-        // if doing requests, cancel it here
-    }
-
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = data[position]
         getSubscriberCount(post)
