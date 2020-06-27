@@ -3,7 +3,6 @@ package com.automattic.freshlypressed.presentation
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,17 +12,16 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.automattic.freshlypressed.R
 import com.automattic.freshlypressed.data.*
-import com.automattic.freshlypressed.databinding.PostsFragmentBinding
+import com.automattic.freshlypressed.databinding.FragmentPostsBinding
+import com.automattic.freshlypressed.domain.Post
 import com.google.android.material.snackbar.Snackbar
 import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 
 class PostsFragment : Fragment() {
 
-    private lateinit var binding: PostsFragmentBinding
+    private lateinit var binding: FragmentPostsBinding
 
-    private val okHttpClient = OkHttpClient() // TODO "inject" @RUI
+    private val okHttpClient = OkHttpClient()
     private val postService = PostsService.createService(okHttpClient)
     private val siteService = SiteService.createService(okHttpClient)
     private val dateMapper = DateMapperImpl()
@@ -37,8 +35,13 @@ class PostsFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = PostsFragmentBinding.inflate(layoutInflater, container, false)
+        binding = FragmentPostsBinding.inflate(layoutInflater, container, false)
         binding.swipeRefresh.setOnRefreshListener { refreshData() }
+        setupRecyclerView()
+        return binding.root
+    }
+
+    private fun setupRecyclerView() {
         with(binding.postsRecyclerView) {
             layoutManager = LinearLayoutManager(context)
             adapter = PostsRecyclerAdapter(
@@ -46,12 +49,6 @@ class PostsFragment : Fragment() {
                 { viewModel.loadCount(it) }
             )
         }
-        return binding.root
-    }
-
-    private fun refreshData() {
-        binding.swipeRefresh.isRefreshing = true
-        viewModel.loadData()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,27 +57,42 @@ class PostsFragment : Fragment() {
         refreshData()
 
         viewModel.posts.observe(viewLifecycleOwner) { data ->
-            val adapter = binding.postsRecyclerView.adapter as PostsRecyclerAdapter
-            adapter.data = data
-            adapter.notifyDataSetChanged()
-            binding.swipeRefresh.isRefreshing = false
+            displayData(data)
+            stopLoading()
         }
 
         viewModel.effects.observe(viewLifecycleOwner) { effect ->
             effect.consume { payload ->
                 when (payload) {
-                    is PostEffects.NavigateToPost -> {
-                        val browseIntent = Intent()
-                        browseIntent.action = Intent.ACTION_VIEW
-                        browseIntent.data = Uri.parse(payload.url)
-                        activity?.let { startActivity(browseIntent) }
-                    }
+                    is PostEffects.NavigateToPost -> navigateToPost(payload)
                     is PostEffects.NetworkError -> {
                         Snackbar.make(requireView(), getString(R.string.error_message), Snackbar.LENGTH_SHORT).show()
-                        binding.swipeRefresh.isRefreshing = false
+                        stopLoading()
                     }
                 }
             }
         }
+    }
+
+    private fun refreshData() {
+        binding.swipeRefresh.isRefreshing = true
+        viewModel.loadData()
+    }
+
+    private fun displayData(data: List<Post>) {
+        val adapter = binding.postsRecyclerView.adapter as PostsRecyclerAdapter
+        adapter.data = data
+        adapter.notifyDataSetChanged()
+    }
+
+    private fun navigateToPost(payload: PostEffects.NavigateToPost) {
+        val browseIntent = Intent()
+        browseIntent.action = Intent.ACTION_VIEW
+        browseIntent.data = Uri.parse(payload.url)
+        activity?.let { startActivity(browseIntent) }
+    }
+
+    private fun stopLoading() {
+        binding.swipeRefresh.isRefreshing = false
     }
 }
