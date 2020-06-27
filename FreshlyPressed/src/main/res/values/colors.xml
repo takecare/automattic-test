@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="stroke_color">#FFEBEE</color>
-  <color name="header_background">#EEEEEE</color>
+  <color name="primary">#bec7cb</color>
+  <color name="primary_light">#ffffff</color>
+  <color name="primary_dark">#9ea7aa</color>
+  <color name="secondary">#212121</color>
+  <color name="secondary_light">#484848</color>
+  <color name="secondary_dark">#000000</color>
+
+  <color name="red">#b00020</color>
+  <color name="stroke_color">#ffebee</color>
+  <color name="header_background">@color/primary_light</color>
 </resources>
