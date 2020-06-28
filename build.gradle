@@ -3,12 +3,12 @@ buildscript {
     repositories {
         jcenter()
         google()
-        maven { url 'https://plugins.gradle.org/m2/' }
+        maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.android.tools.build:gradle:4.0.0'
+        classpath "com.android.tools.build:gradle:4.0.0"
         classpath "de.mannodermaus.gradle.plugins:android-junit5:1.6.2.0"
     }
 }
