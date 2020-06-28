@@ -36,7 +36,8 @@ interface PostMapper {
 }
 
 class PostMapperImpl(
-    private val dateMapper: DateMapper
+    private val dateMapper: DateMapper,
+    private val hostExtractor: HostExtractor
 ) : PostMapper {
     override fun map(data: PostData) =
         Post(
@@ -45,9 +46,8 @@ class PostMapperImpl(
             author = data.author.niceName,
             imageUrl = data.imageUrl,
             date = dateMapper.map(data.date),
-            authorUrl = data.author.url,
-            uri = Uri.parse(data.url),
-            subscriberCount = Int.MIN_VALUE
+            authorHost = hostExtractor.extract(data.author.url),
+            uri = data.url
         )
 }
 
@@ -58,5 +58,13 @@ interface DateMapper {
 class DateMapperImpl(
     private val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.getDefault())
 ) : DateMapper {
-    override fun map(date: String): Date = dateFormat.parse(date)?: Date(0)
+    override fun map(date: String): Date = dateFormat.parse(date) ?: Date(0)
+}
+
+interface HostExtractor {
+    fun  extract(url: String): String
+}
+
+class HostExtractorImpl : HostExtractor {
+    override fun extract(url: String) = Uri.parse(url).host ?: ""
 }
