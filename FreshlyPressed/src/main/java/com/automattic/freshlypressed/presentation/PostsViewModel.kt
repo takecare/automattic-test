@@ -1,20 +1,20 @@
 package com.automattic.freshlypressed.presentation
 
-import android.net.Uri
+import androidx.hilt.Assisted
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.automattic.freshlypressed.domain.Result
 import com.automattic.freshlypressed.domain.Post
 import com.automattic.freshlypressed.domain.PostsRepository
 import com.automattic.freshlypressed.domain.SiteRepository
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class PostsViewModel(
-    private val handle: SavedStateHandle,
+class PostsViewModel @ViewModelInject constructor(
+    @Assisted private val handle: SavedStateHandle,
     private val postsRepository: PostsRepository,
     private val siteRepository: SiteRepository,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val _posts = MutableLiveData<List<Post>>()

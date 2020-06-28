@@ -10,14 +10,14 @@ import retrofit2.http.Query
 
 interface PostsService {
 
-    @GET("discover.wordpress.com/posts?number=1&meta=site&fields=author,date,URL,title,excerpt,featured_image,meta")
+    @GET("discover.wordpress.com/posts?meta=site&fields=author,date,URL,title,excerpt,featured_image,meta")
     suspend fun getPosts(@Query("number") number: Int = 10): Posts
 
     companion object {
-        fun createService(okHttpClient: OkHttpClient): PostsService =
+        fun createService(okHttpClient: OkHttpClient, moshiConverterFactory: MoshiConverterFactory): PostsService =
             Retrofit.Builder()
                 .baseUrl("https://public-api.wordpress.com/rest/v1.1/sites/")
-                .addConverterFactory(MoshiConverterFactory.create())
+                .addConverterFactory(moshiConverterFactory)
                 .client(okHttpClient)
                 .build()
                 .create(PostsService::class.java)

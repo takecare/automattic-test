@@ -11,30 +11,17 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.automattic.freshlypressed.R
-import com.automattic.freshlypressed.data.*
 import com.automattic.freshlypressed.databinding.FragmentPostsBinding
 import com.automattic.freshlypressed.domain.Post
 import com.google.android.material.snackbar.Snackbar
-import okhttp3.OkHttpClient
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PostsFragment : Fragment() {
 
     private lateinit var binding: FragmentPostsBinding
 
-    private val okHttpClient = OkHttpClient()
-    private val postService = PostsService.createService(okHttpClient)
-    private val siteService = SiteService.createService(okHttpClient)
-    private val dateMapper = DateMapperImpl()
-    private val hostExtractor = HostExtractorImpl()
-    private val postMapper = PostMapperImpl(dateMapper, hostExtractor)
-    private val postsRepository = WordpressPostsRepository(postService, postMapper)
-    private val siteMapper = SiteMapperImpl()
-    private val siteRepository = WordpressSiteRepository(siteService, siteMapper)
-    private val viewModelFactory = PostsViewModelFactory(postsRepository, siteRepository)
-
-    private val viewModel: PostsViewModel by viewModels {
-        GenericSavedStateViewModelFactory(viewModelFactory, this)
-    }
+    private val viewModel: PostsViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentPostsBinding.inflate(layoutInflater, container, false)

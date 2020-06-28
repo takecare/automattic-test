@@ -3,7 +3,9 @@ package com.automattic.freshlypressed.presentation
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.automattic.freshlypressed.R
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PostsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
