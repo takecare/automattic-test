@@ -3,17 +3,14 @@ package com.automattic.freshlypressed.presentation
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
-import com.automattic.freshlypressed.domain.Result
-import com.automattic.freshlypressed.domain.Post
-import com.automattic.freshlypressed.domain.PostsRepository
-import com.automattic.freshlypressed.domain.SiteRepository
+import com.automattic.freshlypressed.domain.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 
 class PostsViewModel @ViewModelInject constructor(
     @Assisted private val handle: SavedStateHandle,
-    private val postsRepository: PostsRepository,
-    private val siteRepository: SiteRepository,
+    private val getPostsUseCase: GetPostsUseCase,
+    private val updateSubscriberCountUseCase: UpdateSubscriberCountUseCase,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
@@ -25,28 +22,21 @@ class PostsViewModel @ViewModelInject constructor(
 
     fun loadData() {
         viewModelScope.launch(dispatcher) {
-            val result = postsRepository.loadPosts()
-            if (result is Result.Success) {
-                _posts.postValue(result.content)
-            } else {
-                _effect.postValue(PostEffects.NetworkError.asEffect())
-            }
+            getPostsUseCase.execute(
+                { _posts.postValue(it) },
+                { _effect.postValue(PostEffects.NetworkError.asEffect()) }
+            )
         }
     }
 
     fun loadCount(post: Post) {
-        if (post.hasSubscriberCount() || post.authorHost.isBlank()) return
-
+        val posts = _posts.value
         viewModelScope.launch(dispatcher) {
-            val result = siteRepository.getSite(post.authorHost)
-            if (result is Result.Success) {
-                val site = result.content
-                _posts.value
-                    ?.map { item -> if (item == post) item.copy(subscriberCount = site.subscriberCount) else item }
-                    ?.let { _posts.postValue(it) }
-            } else {
-                _effect.postValue(PostEffects.NetworkError.asEffect())
-            }
+            updateSubscriberCountUseCase.execute(
+                post,
+                posts,
+                { _posts.postValue(it) },
+                { _effect.postValue(PostEffects.NetworkError.asEffect()) })
         }
     }
 
