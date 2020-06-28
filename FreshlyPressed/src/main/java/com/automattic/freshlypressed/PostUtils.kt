@@ -5,7 +5,7 @@ import java.util.*
 
 object PostUtils {
     fun printDate(date: Date): String {
-        val dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault())
+        val dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.US)
         return dateFormat.format(date)
     }
 }
