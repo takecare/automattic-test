@@ -1,13 +1,9 @@
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 apply plugin: "kotlin-android-extensions"
-apply plugin: "kotlin-allopen"
 apply plugin: "de.mannodermaus.android-junit5"
-
-allOpen {
-    // allows mocking for classes w/o directly opening them for release builds
-    annotation "org.wordpress.android.testing.OpenClassAnnotation"
-}
+apply plugin: "kotlin-kapt"
+apply plugin: "dagger.hilt.android.plugin"
 
 repositories {
     jcenter()
@@ -15,15 +11,9 @@ repositories {
 }
 
 dependencies {
-    implementation "com.squareup.okhttp3:okhttp:4.5.0"
-    implementation "com.github.bumptech.glide:glide:4.11.0"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
-    implementation "com.squareup.retrofit2:retrofit:2.9.0"
-    implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
-
-    implementation "com.google.android.material:material:1.1.0"
-
+    // androidx
     implementation "androidx.appcompat:appcompat:1.1.0"
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     implementation "androidx.fragment:fragment:1.2.5"
@@ -33,11 +23,30 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:2.0.0-beta7"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
+    // material
+    implementation "com.google.android.material:material:1.1.0"
+
+    // network
+    implementation "com.squareup.okhttp3:okhttp:4.5.0"
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
+    implementation "com.github.bumptech.glide:glide:4.11.0"
+
+    // hilt
+    def hilt_version = "2.28-alpha"
+    def hilt_viewmodel_version = "1.0.0-alpha01"
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_viewmodel_version"
+    kapt "androidx.hilt:hilt-compiler:$hilt_viewmodel_version"
+
+    // viewmodel + lifecycles
     def lifecycle_version = "2.2.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
 
+    // testing
     testImplementation "junit:junit:4.13"
     testImplementation "org.junit.jupiter:junit-jupiter-api:5.6.2"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.6.2"
@@ -60,7 +69,7 @@ android {
         targetSdkVersion 29
 
         applicationId "com.automattic.freshlypressed"
-        versionName "1.0.0"
+        versionName "0.1.0"
         versionCode 1
     }
 
