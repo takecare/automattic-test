@@ -49,7 +49,7 @@ class HeaderViewHolder(
 ) : PostViewHolder(listener, view) {
 
     override fun bind(post: Post) {
-        binding.header.text = printDate(post.date) // TODO replace postutils @RUI
+        binding.header.text = printDate(post.date)
 
         with(binding.item) {
             title.text = post.readableTitle()
