@@ -85,7 +85,15 @@ class PostsViewModelTest : AsyncTest() {
         assertThat(values).hasSize(1)
         assertThat(values[0]).isEqualTo(PostEffects.NetworkError.asEffect())
     }
+
+    @Test
+    internal fun `viewmodel emits navigation effect when post clicked`() {
+        val values = sut.effects.toList()
+
+        sut.postClicked(Fixtures.postList[0])
+
+        assertThat(values[0]).isEqualTo(PostEffects.NavigateToPost(Fixtures.postList[0].uri).asEffect())
+    }
 }
 
 fun <T> LiveData<T>.toList(): List<T> = mutableListOf<T>().also { observeForever { item -> it.add(item) } }
-
