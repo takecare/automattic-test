@@ -39,7 +39,7 @@ class PostsViewModelTest {
     private val sut = PostsViewModel(handle, postsRepository, siteRepository, dispatcher)
 
     @Test
-    internal fun `viewmodel emits posts it fetches from the repository`() = scope.runBlockingTest {
+    internal fun `viewmodel emits posts it fetches from the repository`() {
         val values = sut.posts.toList()
         coEvery { postsRepository.loadPosts() } returns Result.Success(Fixtures.postList)
 
@@ -49,7 +49,7 @@ class PostsViewModelTest {
     }
 
     @Test
-    internal fun `viewmodel emits error when it fails to fetch posts from the repository`() = scope.runBlockingTest {
+    internal fun `viewmodel emits error when it fails to fetch posts from the repository`() {
         val values = sut.effects.toList()
         coEvery { postsRepository.loadPosts() } returns Result.Error(Throwable("boom!"))
 
@@ -60,7 +60,7 @@ class PostsViewModelTest {
     }
 
     @Test
-    internal fun `viewmodel emits posts with count it fetches from the repository`() = scope.runBlockingTest {
+    internal fun `viewmodel emits posts with count it fetches from the repository`() {
         val values = sut.posts.toList()
         coEvery { postsRepository.loadPosts() } returns Result.Success(Fixtures.postList)
         coEvery { siteRepository.getSite(any()) } returns Result.Success(Fixtures.site)
@@ -73,7 +73,7 @@ class PostsViewModelTest {
     }
 
     @Test
-    internal fun `viewmodel emits error when it fails to fetch site from the repository`() = scope.runBlockingTest {
+    internal fun `viewmodel emits error when it fails to fetch site from the repository`() {
         val values = sut.effects.toList()
         coEvery { siteRepository.getSite(any()) } returns Result.Error(Throwable("boom!"))
 
@@ -112,6 +112,4 @@ class InstantExecutorExtension(
         Dispatchers.resetMain()
         ArchTaskExecutor.getInstance().setDelegate(null)
     }
-
-    fun runBlocking(block: suspend TestCoroutineScope.() -> Unit) = scope.runBlockingTest(block)
 }
