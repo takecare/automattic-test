@@ -27,7 +27,8 @@ class PostsFragment : Fragment() {
     private val dateMapper = DateMapperImpl()
     private val postMapper = PostMapperImpl(dateMapper)
     private val postsRepository = WordpressPostsRepository(postService, postMapper)
-    private val siteRepository = WordpressSiteRepository(siteService)
+    private val siteMapper = SiteMapperImpl()
+    private val siteRepository = WordpressSiteRepository(siteService, siteMapper)
     private val viewModelFactory = PostsViewModelFactory(postsRepository, siteRepository)
 
     private val viewModel: PostsViewModel by viewModels {
