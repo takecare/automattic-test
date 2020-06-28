@@ -2,11 +2,14 @@ package com.automattic.freshlypressed.domain
 
 import javax.inject.Inject
 
+typealias UpdateCountSuccessCallback = (List<Post>) -> Unit
+typealias UpdateCountErrorCallback = (Throwable) -> Unit
+
 class UpdateSubscriberCountUseCase @Inject constructor(
     private val siteRepository: SiteRepository
 ) {
 
-    suspend fun execute(post: Post, posts: List<Post>?, success: (List<Post>) -> Unit, failure: (Throwable) -> Unit) {
+    suspend fun execute(post: Post, posts: List<Post>?, success: UpdateCountSuccessCallback, failure: UpdateCountErrorCallback) {
         if (post.hasSubscriberCount() || posts == null || post.authorHost.isBlank()) return
 
         val result = siteRepository.getSite(post.authorHost)
