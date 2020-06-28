@@ -10,7 +10,9 @@ class UpdateSubscriberCountUseCase @Inject constructor(
 ) {
 
     suspend fun execute(post: Post, posts: List<Post>?, success: UpdateCountSuccessCallback, failure: UpdateCountErrorCallback) {
-        if (post.hasSubscriberCount() || posts == null || post.authorHost.isBlank()) return
+        if (post.hasSubscriberCount() || posts == null || post.authorHost.isBlank()) {
+            return
+        }
 
         val result = siteRepository.getSite(post.authorHost)
         when (result) {

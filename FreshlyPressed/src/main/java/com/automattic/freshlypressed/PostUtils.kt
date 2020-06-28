@@ -1,7 +1,8 @@
 package com.automattic.freshlypressed
 
 import java.text.DateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 object PostUtils {
     fun printDate(date: Date): String {

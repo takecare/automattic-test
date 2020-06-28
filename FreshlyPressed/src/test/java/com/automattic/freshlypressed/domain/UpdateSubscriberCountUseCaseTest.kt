@@ -60,4 +60,10 @@ class UpdateSubscriberCountUseCaseTest : AsyncTest() {
         assertFalse(successCalled)
         assertTrue(failureCalled)
     }
+
+    @Test
+    fun `given a post with subscriber cout, when executing the usecase, `() {
+
+        // TODO: name not implemented
+    }
 }

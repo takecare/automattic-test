@@ -2,8 +2,14 @@ package com.automattic.freshlypressed.presentation
 
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.*
-import com.automattic.freshlypressed.domain.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.automattic.freshlypressed.domain.GetPostsUseCase
+import com.automattic.freshlypressed.domain.Post
+import com.automattic.freshlypressed.domain.UpdateSubscriberCountUseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 

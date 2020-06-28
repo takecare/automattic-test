@@ -6,8 +6,7 @@ import com.automattic.freshlypressed.domain.PostsRepository
 import com.automattic.freshlypressed.domain.Result
 import java.io.IOException
 import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
 import javax.inject.Inject
 
 class WordpressPostsRepository @Inject constructor(

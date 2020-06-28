@@ -1,6 +1,6 @@
 package com.automattic.freshlypressed.domain
 
-import java.util.*
+import java.util.Date
 
 data class Post(
     val title: String,
